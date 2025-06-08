@@ -31,6 +31,11 @@ export default function UserListScreen() {
     localStorage.setItem("userList", JSON.stringify(updated));
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("loggedInUser");
+    navigate("/");
+  };
+
   const isValidLottie = (data) => {
     try {
       const parsed = typeof data === "string" ? JSON.parse(data) : data;
@@ -46,7 +51,13 @@ export default function UserListScreen() {
 
   return (
     <div style={{ padding: "1rem" }}>
-      <h2>👥 User List</h2>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <h2>👥 User List</h2>
+        <button onClick={handleLogout} style={{ background: "#e74c3c", color: "white", border: "none", padding: "0.5rem 1rem", borderRadius: "5px" }}>
+          🔒 Logout
+        </button>
+      </div>
+
       <input
         type="text"
         placeholder="Search users..."
@@ -55,9 +66,6 @@ export default function UserListScreen() {
         style={{ padding: "0.5rem", width: "300px", marginRight: 10 }}
       />
       <button onClick={() => navigate("/add-user")}>➕ Add User</button>
-      <button onClick={() => navigate(-1)} style={{ marginLeft: 10 }}>
-        🔙 Back
-      </button>
 
       {filtered.length === 0 && <p>No users found.</p>}
 
@@ -117,7 +125,7 @@ export default function UserListScreen() {
             </div>
           )}
 
-          {/* Fallback for unsupported or invalid files */}
+          {/* Fallback for unsupported files */}
           {user.file && user.fileType !== "image" && user.fileType !== "lottie" && (
             <p>📁 File uploaded: {user.fileType}</p>
           )}
